@@ -1,32 +1,28 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "t48tweaks",
   "version": "${version}",
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Tetro48's Tweaks",
+  "description": "This addon contains tweaks from Tetro48.",
   "authors": [
-    "Me!"
+    "Tetro48"
   ],
-  "contact": {
-    "homepage": "https://legacyfabric.net/",
-    "sources": "https://github.com/Legacy-Fabric/fabric-example-mod"
-  },
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/t48tweaks/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "net.tetro48.tweaks.TweaksMod"
     ],
     "btw:addon": [
-      "btw.community.example.ExampleAddon"
+      "btw.community.tweaks.TweaksAddon"
     ]
   },
   "custom": {
     "btw:addon_prefix": "EX"
   },
   "mixins": [
-    "modid.mixins.json"
+    "t48tweaks.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14.19",
