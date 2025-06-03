@@ -16,6 +16,7 @@ public class TweaksAddon extends BTWAddon {
     private static TweaksAddon instance;
 
     public static boolean enableTPA = false;
+    public static boolean enableTimeFreeze = true;
 
     public static List<TPATargetClass> TPATargets;
     public static List<TPATargetClass> TPARequests;
@@ -27,6 +28,7 @@ public class TweaksAddon extends BTWAddon {
     @Override
     public void preInitialize() {
         registerProperty("EnableTPA", "False", "This toggles the /tpa command.");
+        registerProperty("EnableTimeFreeze", "True", "This toggles the time freeze when no one is online.");
     }
 
     @Override
@@ -39,6 +41,7 @@ public class TweaksAddon extends BTWAddon {
     @Override
     public void handleConfigProperties(Map<String, String> propertyValues) {
         enableTPA = Boolean.parseBoolean(propertyValues.get("EnableTPA"));
+        enableTimeFreeze = Boolean.parseBoolean(propertyValues.get("EnableTimeFreeze"));
         if (enableTPA) {
             registerAddonCommand(new CommandTPA());
         }

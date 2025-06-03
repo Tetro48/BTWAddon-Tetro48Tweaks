@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "EntitySkeletonMixin",
-    "MinecraftServerMixin"
+    "MinecraftServerMixin",
+    "WorldServerMixin"
   ],
   "client": [
   ],
