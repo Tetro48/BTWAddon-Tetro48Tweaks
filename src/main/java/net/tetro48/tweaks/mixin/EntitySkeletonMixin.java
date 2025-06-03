@@ -29,7 +29,6 @@ public abstract class EntitySkeletonMixin extends EntityMob {
 
 	@Inject(method = "attackEntityWithRangedAttack", at = @At("HEAD"))
 	private void markRangedShot(EntityLivingBase target, float fDamageModifier, CallbackInfo ci) {
-		System.out.println("skele shot");
 		hasSkeletonShot = true;
 	}
 
