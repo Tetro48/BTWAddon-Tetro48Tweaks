@@ -10,7 +10,8 @@ public class TPATargetClass {
 	private boolean isTeleportingEntityInBounds;
 	private boolean isTargetEntityInBounds;
 	public long tickDuration;
-	public TPATargetClass(Entity teleportingEntity, Entity targetEntity, long tickDuration) {
+	public int xpLevelCost;
+	public TPATargetClass(Entity teleportingEntity, Entity targetEntity, long tickDuration, int xpLevelCost) {
 		this.teleportingEntity = teleportingEntity;
 		this.targetEntity = targetEntity;
 		this.initialPosOfTeleportingEntity = Vec3.fakePool.getVecFromPool(teleportingEntity.posX, teleportingEntity.posY, teleportingEntity.posZ);
@@ -18,6 +19,7 @@ public class TPATargetClass {
 		this.isTeleportingEntityInBounds = true;
 		this.isTargetEntityInBounds = true;
 		this.tickDuration = tickDuration;
+		this.xpLevelCost = xpLevelCost;
 	}
 
 	public boolean withinBounds(Entity entity, Vec3 initialPos, double cube_size) {
@@ -43,7 +45,7 @@ public class TPATargetClass {
 			return;
 		}
 		if (tickDuration == 80) {
-			teleportingEntity.playSound("portal.trigger", 0.5f, 0.9f + 0.2f * teleportingEntity.rand.nextFloat());
+			teleportingEntity.worldObj.playSoundEffect(teleportingEntity.posX, teleportingEntity.posY, teleportingEntity.posZ,"portal.trigger", 0.5f, 0.9f + 0.2f * teleportingEntity.rand.nextFloat());
 		}
 		boolean wasTeleportingEntityInBounds = this.isTeleportingEntityInBounds;
 		boolean wasTargetEntityInBounds = this.isTargetEntityInBounds;
@@ -55,10 +57,19 @@ public class TPATargetClass {
 		if ((wasTargetEntityInBounds && !this.isTargetEntityInBounds)
 		   || (wasTeleportingEntityInBounds && !this.isTeleportingEntityInBounds)) {
 			if (teleportingEntity instanceof EntityPlayerMP teleportingPlayer) {
-				teleportingPlayer.sendChatToPlayer(ChatMessageComponent.createFromText("Someone got outside the teleport bounds, teleport is now delayed."));
+				teleportingPlayer.sendChatToPlayer(ChatMessageComponent.createFromText("Someone got outside the teleport bounds, teleport is now paused."));
 			}
 			if (targetEntity instanceof EntityPlayerMP targetPlayer) {
-				targetPlayer.sendChatToPlayer(ChatMessageComponent.createFromText("Someone got outside the teleport bounds, teleport is now delayed."));
+				targetPlayer.sendChatToPlayer(ChatMessageComponent.createFromText("Someone got outside the teleport bounds, teleport is now paused."));
+			}
+		}
+		if ((!wasTargetEntityInBounds && this.isTargetEntityInBounds)
+				|| (!wasTeleportingEntityInBounds && this.isTeleportingEntityInBounds)) {
+			if (teleportingEntity instanceof EntityPlayerMP teleportingPlayer) {
+				teleportingPlayer.sendChatToPlayer(ChatMessageComponent.createFromText("Someone got inside the teleport bounds."));
+			}
+			if (targetEntity instanceof EntityPlayerMP targetPlayer) {
+				targetPlayer.sendChatToPlayer(ChatMessageComponent.createFromText("Someone got inside the teleport bounds."));
 			}
 		}
 
@@ -66,6 +77,8 @@ public class TPATargetClass {
 			teleportingEntity.copyLocationAndAnglesFrom(targetEntity);
 			if (teleportingEntity instanceof EntityPlayerMP teleportingPlayer) {
 				teleportingPlayer.setPositionAndUpdate(targetEntity.posX, targetEntity.posY, targetEntity.posZ);
+				teleportingPlayer.experienceLevel -= xpLevelCost;
+				teleportingPlayer.playerNetServerHandler.sendPacketToPlayer(new Packet43Experience(teleportingPlayer.experience, teleportingPlayer.experienceTotal, teleportingPlayer.experienceLevel));
 			}
 			teleportingEntity.playSound("mob.endermen.portal", 0.5f, 0.75f);
 		}
