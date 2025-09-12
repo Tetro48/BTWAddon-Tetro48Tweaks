@@ -4,7 +4,9 @@
   "package": "net.tetro48.tweaks.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "CommandKillMixin",
     "EntitySkeletonMixin",
+    "HardcoreSpawnUtilsMixin",
     "MinecraftServerMixin",
     "WorldServerMixin"
   ],

@@ -39,7 +39,7 @@ public class TPATargetClass {
 			teleportingPlayer.sendChatToPlayer(ChatMessageComponent.createFromText("Your teleport target has either despawned, disconnected, or killed."));
 		}
 		if (teleportingEntity == null && targetEntity instanceof EntityPlayerMP targetPlayer) {
-			targetPlayer.sendChatToPlayer(ChatMessageComponent.createFromText("Your teleport target has either despawned, disconnected, or killed."));
+			targetPlayer.sendChatToPlayer(ChatMessageComponent.createFromText("That teleporting player has either despawned, disconnected, or killed."));
 		}
 		if (teleportingEntity == null || targetEntity == null) {
 			return;
@@ -52,7 +52,12 @@ public class TPATargetClass {
 		this.isTeleportingEntityInBounds = withinBounds(teleportingEntity, initialPosOfTeleportingEntity, 8);
 		this.isTargetEntityInBounds = withinBounds(targetEntity, initialPosOfTargetEntity, 8);
 		if (this.isTeleportingEntityInBounds && this.isTargetEntityInBounds) {
-			tickDuration--;
+			if (teleportingEntity instanceof EntityPlayerMP teleportingPlayer && teleportingPlayer.experienceLevel >= xpLevelCost) {
+				tickDuration--;
+			}
+			else if (!(teleportingEntity instanceof EntityPlayerMP)) {
+				tickDuration--;
+			}
 		}
 		if ((wasTargetEntityInBounds && !this.isTargetEntityInBounds)
 		   || (wasTeleportingEntityInBounds && !this.isTeleportingEntityInBounds)) {

@@ -79,7 +79,13 @@ public class CommandTPA extends CommandBase {
 			for (TPATargetClass tpaRequest : TPARequests) {
 				if (tpaRequest.targetEntity == getCommandSenderAsPlayer(iCommandSender) && ((EntityPlayerMP) tpaRequest.teleportingEntity).getCommandSenderName().equals(strings[1])) {
 					if (strings[0].equals("accept")) {
+						if (((EntityPlayerMP) tpaRequest.teleportingEntity).experienceLevel < getXpCost(tpaRequest.targetEntity, tpaRequest.teleportingEntity)) {
+							iCommandSender.sendChatToPlayer(ChatMessageComponent.createFromText(String.format("The requested teleport got aborted due to %s not having enough XP levels.", ((EntityPlayerMP) tpaRequest.teleportingEntity).getCommandSenderName())));
+							((EntityPlayerMP) tpaRequest.teleportingEntity).sendChatToPlayer(ChatMessageComponent.createFromText(String.format("Your teleport request to %s failed due to you not having enough XP levels.", ((EntityPlayerMP) tpaRequest.targetEntity).getCommandSenderName())));
+							return;
+						}
 						tpaRequest.tickDuration = 100;
+						tpaRequest.xpLevelCost = getXpCost(tpaRequest.targetEntity, tpaRequest.teleportingEntity);
 						TPATargets.add(tpaRequest);
 						iCommandSender.sendChatToPlayer(ChatMessageComponent.createFromText(String.format("Accepted the TP request from %s, and will be teleported to you in %.2f seconds.", ((EntityPlayerMP) tpaRequest.teleportingEntity).getCommandSenderName(), tpaRequest.tickDuration / 20d)));
 						((EntityPlayerMP) tpaRequest.teleportingEntity).sendChatToPlayer(ChatMessageComponent.createFromText(String.format("Your teleport request to %s is accepted, and you are going to be teleported in %.2f seconds.", ((EntityPlayerMP) tpaRequest.targetEntity).getCommandSenderName(), tpaRequest.tickDuration / 20d)));
@@ -129,12 +135,12 @@ public class CommandTPA extends CommandBase {
 		}
 	}
 
-	private static int getXpCost(EntityPlayerMP targetPlayer, EntityPlayerMP teleportingPlayer) {
-		double distX = Math.abs(targetPlayer.posX - teleportingPlayer.posX);
-		double distZ = Math.abs(targetPlayer.posZ - teleportingPlayer.posZ);
+	private static int getXpCost(Entity targetEntity, Entity teleportingEntity) {
+		double distX = Math.abs(targetEntity.posX - teleportingEntity.posX);
+		double distZ = Math.abs(targetEntity.posZ - teleportingEntity.posZ);
 		int xpCost = 0;
 		xpCost += (int) (Math.sqrt((distX * distX) + (distZ * distZ)) / 300);
-		xpCost += (int) (Math.max(0, 64 - teleportingPlayer.posY) / 1.5);
+		xpCost += (int) (Math.max(0, 64 - teleportingEntity.posY) / 1.5);
 		return xpCost;
 	}
 }
