@@ -16,7 +16,7 @@ public abstract class HardcoreSpawnUtilsMixin {
 	private static void countDeath(EntityPlayerMP oldPlayer, EntityPlayerMP newPlayer) {
 	}
 
-	@Inject(method = "handleHardcoreSpawn", at = @At(value = "INVOKE", ordinal = 1, target = "Lbtw/util/hardcorespawn/HardcoreSpawnUtils;returnPlayerToOriginalSpawn(Lnet/minecraft/src/World;Lnet/minecraft/src/EntityPlayerMP;)V"))
+	@Inject(method = "handleHardcoreSpawn", at = @At(value = "INVOKE", target = "Lbtw/util/hardcorespawn/HardcoreSpawnUtils;returnPlayerToOriginalSpawn(Lnet/minecraft/src/World;Lnet/minecraft/src/EntityPlayerMP;)V"))
 	private static void makeDeathCountOnClassic(MinecraftServer server, EntityPlayerMP oldPlayer, EntityPlayerMP newPlayer, CallbackInfo ci) {
 		if (!oldPlayer.playerConqueredTheEnd) {
 			countDeath(oldPlayer, newPlayer);
