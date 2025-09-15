@@ -8,6 +8,7 @@
     "EntitySkeletonMixin",
     "HardcoreSpawnUtilsMixin",
     "MinecraftServerMixin",
+    "TradeListMixin",
     "WorldServerMixin"
   ],
   "client": [
