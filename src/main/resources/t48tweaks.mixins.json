@@ -6,7 +6,6 @@
   "mixins": [
     "CommandKillMixin",
     "EntitySkeletonMixin",
-    "HardcoreSpawnUtilsMixin",
     "MinecraftServerMixin",
     "TradeListMixin",
     "WorldServerMixin"

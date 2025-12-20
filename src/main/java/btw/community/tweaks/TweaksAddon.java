@@ -1,7 +1,8 @@
 package btw.community.tweaks;
 
-import btw.AddonHandler;
-import btw.BTWAddon;
+import api.AddonHandler;
+import api.BTWAddon;
+import api.config.AddonConfig;
 import btw.block.BTWBlocks;
 import btw.crafting.recipe.RecipeManager;
 import btw.item.BTWItems;
@@ -25,9 +26,11 @@ public class TweaksAddon extends BTWAddon {
 	}
 
 	@Override
-	public void preInitialize() {
-		registerProperty("EnableTPA", "False", "This toggles the /tpa command.");
-		registerProperty("EnableTimeFreeze", "True", "This toggles the time freeze when no one is online.");
+	public void registerConfigProperties(AddonConfig config) {
+		config.registerBoolean("enable-tpa", false, "This toggles the /tpa command.");
+		config.updatePath("EnableTPA", "enable-tpa");
+		config.registerBoolean("enable-time-freeze", true, "This toggles the time freeze when no one is online.");
+		config.updatePath("EnableTimeFreeze", "enable-time-freeze");
 	}
 
 	@Override
@@ -38,9 +41,9 @@ public class TweaksAddon extends BTWAddon {
 	}
 
 	@Override
-	public void handleConfigProperties(Map<String, String> propertyValues) {
-		enableTPA = Boolean.parseBoolean(propertyValues.get("EnableTPA"));
-		enableTimeFreeze = Boolean.parseBoolean(propertyValues.get("EnableTimeFreeze"));
+	public void handleConfigProperties(AddonConfig config) {
+		enableTPA = config.getBoolean("enable-tpa");
+		enableTimeFreeze = config.getBoolean("enable-time-freeze");
 		if (enableTPA) {
 			registerAddonCommand(new CommandTPA());
 		}
